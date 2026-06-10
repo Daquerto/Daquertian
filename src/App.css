@@ -1,0 +1,412 @@
+.app{
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar{
+  width: 260px;
+  padding: 20px;
+  background: #171a21;
+  border-right: 1px solid #2a2f3a;
+}
+
+.workspace{
+  flex: 1;
+  padding: 32px;
+  background: #111318;
+}
+
+.notes-list{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.note-item{
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #d7dce8;
+  text-align: left;
+  cursor: pointer;
+}
+
+.note-item:hover{
+  background: #222733;
+}
+
+.note-item.active {
+  background: #2a3040;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.editor {
+  width: 100%;
+  min-height: 400px;
+  padding: 16px;
+  border: 1px solid #2a2f3a;
+  border-radius: 10px;
+  background: #151821;
+  color: #e6e6e6;
+  font-size: 16px;
+  line-height: 1.6;
+  resize: vertical;
+  outline: none;
+}
+
+.note-item:focus{
+  outline: none;
+}
+
+.create-note-button {
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 10px 12px;
+  border: 1px solid #353b4a;
+  border-radius: 8px;
+  background: #202532;
+  color: #ffffff;
+  text-align: left;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.create-note-button:hover {
+  background: #2a3040;
+}
+
+.create-note-button:focus {
+  outline: none;
+}
+
+.title-input {
+  width: 100%;
+  margin-bottom: 20px;
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  font-size: 36px;
+  font-weight: 700;
+  outline: none;
+}
+
+.delete-note-button {
+  margin-bottom: 16px;
+  padding: 8px 12px;
+  border: 1px solid #5a2f35;
+  border-radius: 8px;
+  background: #2a171b;
+  color: #ffb4bd;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.delete-note-button:hover {
+  background: #3a1f25;
+}
+
+.delete-note-button:focus {
+  outline: none;
+}
+
+.delete-note-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.preview {
+  margin-top: 0;
+  padding: 20px;
+  border: 1px solid #2a2f3a;
+  border-radius: 10px;
+  background: #111318;
+  color: #e6e6e6;
+  min-height: 400px;
+}
+
+.preview h1,
+.preview h2,
+.preview h3 {
+  margin-top: 0;
+  color: #ffffff;
+}
+
+.preview p {
+  line-height: 1.7;
+}
+
+.preview code {
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: #202532;
+}
+
+.editor-preview-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.links-panel {
+  grid-column: 1 / -1;
+  padding: 16px;
+  border: 1px solid #2a2f3a;
+  border-radius: 10px;
+  background: #111318;
+}
+
+.links-panel h3 {
+  margin-top: 0;
+}
+
+.links-panel ul {
+  margin-bottom: 0;
+}
+
+.wiki-link {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #9b7cff;
+  cursor: pointer;
+  font: inherit;
+  text-decoration: underline;
+}
+
+.wiki-link:hover {
+  color: #c4b5ff;
+}
+
+.backlinks-panel {
+  grid-column: 1 / -1;
+  padding: 16px;
+  border: 1px solid #2a2f3a;
+  border-radius: 10px;
+  background: #111318;
+}
+
+.backlinks-panel h3 {
+  margin-top: 0;
+}
+
+.backlinks-panel ul {
+  margin-bottom: 0;
+}
+
+.backlink-button {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #9b7cff;
+  cursor: pointer;
+  font: inherit;
+  text-decoration: underline;
+}
+
+.backlink-button:hover {
+  color: #c4b5ff;
+}
+
+.graph-view {
+  grid-column: 1 / -1;
+  height: 420px;
+  border: 1px solid #2a2f3a;
+  border-radius: 10px;
+  background: #0d1016;
+  overflow: hidden;
+}
+
+.react-flow__node {
+  background: #202532;
+  color: #ffffff;
+  border: 1px solid #3a4152;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-weight: 600;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}
+
+.react-flow__node.selected {
+  border-color: #9b7cff;
+  box-shadow: 0 0 0 2px rgba(155, 124, 255, 0.25);
+}
+
+.react-flow__edge-path {
+  stroke: #7c8496;
+  stroke-width: 2;
+}
+
+.react-flow__controls {
+  background: #171a21;
+  border: 1px solid #2a2f3a;
+}
+
+.react-flow__controls-button {
+  background: #202532;
+  border-bottom: 1px solid #2a2f3a;
+  color: #ffffff;
+}
+
+.note-graph-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.note-graph-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #c4c8d4;
+  box-shadow: 0 0 14px rgba(196, 200, 212, 0.35);
+}
+
+.note-graph-label {
+  color: #d7dce8;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.react-flow__node-noteNode {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.react-flow__handle {
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.note-graph-dot.active {
+  background: #9b7cff;
+  box-shadow: 0 0 18px rgba(155, 124, 255, 0.85);
+  transform: scale(1.25);
+}
+
+.note-graph-label.active {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+@keyframes nodeBreath {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.75;
+  }
+
+  50% {
+    transform: translateY(-4px) scale(1.22);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.75;
+  }
+}
+
+.note-graph-dot {
+  animation: nodeBreath 2.6s ease-in-out infinite;
+}
+
+@keyframes activeNodePulse {
+  0% {
+    transform: scale(1.25);
+    box-shadow: 0 0 14px rgba(155, 124, 255, 0.55);
+  }
+
+  50% {
+    transform: scale(1.45);
+    box-shadow: 0 0 28px rgba(155, 124, 255, 0.95);
+  }
+
+  100% {
+    transform: scale(1.25);
+    box-shadow: 0 0 14px rgba(155, 124, 255, 0.55);
+  }
+}
+
+.note-graph-dot.active {
+  animation: activeNodePulse 2.4s ease-in-out infinite;
+}
+
+@keyframes edgeFlow {
+  from {
+    stroke-dashoffset: 24;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.react-flow__edge-path {
+  stroke-dasharray: 8 8;
+  animation: edgeFlow 1.8s linear infinite;
+}
+
+.workspace-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid #2a2f3a;
+}
+
+.workspace-tab {
+  padding: 8px 14px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: #9aa3b5;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.workspace-tab:hover {
+  color: #ffffff;
+}
+
+.workspace-tab.active {
+  color: #ffffff;
+  border-bottom-color: #9b7cff;
+}
+
+.workspace-tab:focus {
+  outline: none;
+}
+.graph-section-full {
+  width: 100%;
+}
+
+.graph-view-full {
+  height: calc(100vh - 150px);
+}
+
+.workspace-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.workspace-tab-close {
+  opacity: 0.55;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.workspace-tab-close:hover {
+  opacity: 1;
+  color: #ffb4bd;
+}
