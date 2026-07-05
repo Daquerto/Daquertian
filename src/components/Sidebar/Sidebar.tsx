@@ -1,0 +1,70 @@
+import { useState } from 'react';
+import type { Note } from '../../types/note';
+
+type SidebarProps = {
+  notes: Note[];
+  selectedNote: Note;
+  openNote: (note: Note) => void;
+  createNote: () => void;
+};
+
+function Sidebar({
+  notes,
+  selectedNote,
+  openNote,
+  createNote,
+}: SidebarProps) {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const normalizedSearchQuery = searchQuery.trim().toLowerCase();
+
+  const filteredNotes = notes.filter((note) => {
+    if (normalizedSearchQuery.length === 0) {
+      return true;
+    }
+
+    return (
+      note.title.toLowerCase().includes(normalizedSearchQuery) ||
+      note.content.toLowerCase().includes(normalizedSearchQuery)
+    );
+  });
+
+  return (
+    <aside className="sidebar">
+      <h2>Daquertian</h2>
+
+      <button className="create-note-button" onClick={createNote}>
+        + Новая заметка
+      </button>
+
+      <input
+        className="sidebar-search"
+        placeholder="Поиск заметок..."
+        value={searchQuery}
+        onChange={(event) => setSearchQuery(event.target.value)}
+      />
+
+      <div className="notes-list">
+        {filteredNotes.length === 0 ? (
+          <p className="empty-search-message">Ничего не найдено.</p>
+        ) : (
+          filteredNotes.map((note) => (
+            <button
+              key={note.id}
+              className={
+                note.id === selectedNote.id
+                  ? 'note-item active'
+                  : 'note-item'
+              }
+              onClick={() => openNote(note)}
+            >
+              {note.title}
+            </button>
+          ))
+        )}
+      </div>
+    </aside>
+  );
+}
+
+export default Sidebar;
