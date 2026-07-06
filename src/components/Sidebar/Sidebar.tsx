@@ -4,15 +4,19 @@ import type { Note } from '../../types/note';
 type SidebarProps = {
   notes: Note[];
   selectedNote: Note;
+  vaultPath: string | null;
   openNote: (note: Note) => void;
   createNote: () => void;
+  openVault: () => void;
 };
 
 function Sidebar({
   notes,
   selectedNote,
+  vaultPath,
   openNote,
   createNote,
+  openVault,
 }: SidebarProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -36,6 +40,16 @@ function Sidebar({
       <button className="create-note-button" onClick={createNote}>
         + Новая заметка
       </button>
+
+      <button className="open-vault-button" onClick={openVault}>
+        📂 Open Vault
+      </button>
+
+      {vaultPath && (
+        <div className="vault-path" title={vaultPath}>
+          {vaultPath}
+        </div>
+      )}
 
       <input
         className="sidebar-search"

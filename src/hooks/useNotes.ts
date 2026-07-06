@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import type { Note } from '../types/note';
 import { isNote } from '../utils/wiki';
+import type { Note } from '../types/note';
+import { saveNoteToVault } from '../services/vaultService';
 
 export type ActiveView = 'note' | 'graph';
 
@@ -49,10 +50,26 @@ export function useNotes() {
   const [selectedNote, setSelectedNote] = useState<Note>(() => notes[0]);
   const [activeView, setActiveView] = useState<ActiveView>('note');
   const [openNoteIds, setOpenNoteIds] = useState<number[]>(() => [notes[0].id]);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('daquertian-notes', JSON.stringify(notes));
   }, [notes]);
+
+  useEffect(() => {
+    const handleKeyDown = async (event: KeyboardEvent) => {
+      if (!(event.ctrlKey && event.code === 'KeyS')) {
+        return;
+      }
+
+      event.preventDefault();
+      await saveSelectedNote();
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  });
 
   const openNote = (note: Note) => {
     setSelectedNote(note);
@@ -68,6 +85,7 @@ export function useNotes() {
       id: Date.now(),
       title: `Новая заметка ${notes.length + 1}`,
       content: '',
+      isDirty: true,
     };
 
     setNotes((currentNotes) => [...currentNotes, newNote]);
@@ -124,6 +142,7 @@ export function useNotes() {
       id: Date.now(),
       title: noteTitle,
       content: '',
+      isDirty: true,
     };
 
     setNotes((currentNotes) => [...currentNotes, newNote]);
@@ -133,21 +152,69 @@ export function useNotes() {
   };
 
   const updateSelectedNoteTitle = (newTitle: string) => {
+    const updatedSelectedNote = {
+      ...selectedNote,
+      title: newTitle,
+      isDirty: true,
+    };
+
     const updatedNotes = notes.map((note) =>
-      note.id === selectedNote.id ? { ...note, title: newTitle } : note
+      note.id === selectedNote.id ? updatedSelectedNote : note
     );
 
     setNotes(updatedNotes);
-    setSelectedNote({ ...selectedNote, title: newTitle });
+    setSelectedNote(updatedSelectedNote);
   };
 
   const updateSelectedNoteContent = (newContent: string) => {
+    const updatedSelectedNote = {
+      ...selectedNote,
+      content: newContent,
+      isDirty: true,
+    };
+
     const updatedNotes = notes.map((note) =>
-      note.id === selectedNote.id ? { ...note, content: newContent } : note
+      note.id === selectedNote.id ? updatedSelectedNote : note
     );
 
     setNotes(updatedNotes);
-    setSelectedNote({ ...selectedNote, content: newContent });
+    setSelectedNote(updatedSelectedNote);
+  };
+
+  const saveSelectedNote = async () => {
+    if (!selectedNote.path) {
+      console.warn('Эта заметка пока не связана с .md файлом.');
+      return;
+    }
+
+    setIsSaving(true);
+
+    try {
+      await saveNoteToVault(selectedNote);
+
+      const savedNote = {
+        ...selectedNote,
+        isDirty: false,
+      };
+
+      setSelectedNote(savedNote);
+      setNotes((currentNotes) =>
+        currentNotes.map((note) => (note.id === savedNote.id ? savedNote : note))
+      );
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const replaceNotes = (nextNotes: Note[]) => {
+    if (nextNotes.length === 0) {
+      return;
+    }
+
+    setNotes(nextNotes.map((note) => ({ ...note, isDirty: false })));
+    setSelectedNote({ ...nextNotes[0], isDirty: false });
+    setOpenNoteIds([nextNotes[0].id]);
+    setActiveView('note');
   };
 
   return {
@@ -155,9 +222,10 @@ export function useNotes() {
     selectedNote,
     activeView,
     openNoteIds,
+    isSaving,
 
     setActiveView,
-
+    replaceNotes,
     openNote,
     createNote,
     deleteSelectedNote,
@@ -165,5 +233,6 @@ export function useNotes() {
     openOrCreateNoteByTitle,
     updateSelectedNoteTitle,
     updateSelectedNoteContent,
+    saveSelectedNote,
   };
 }

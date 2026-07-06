@@ -4,7 +4,7 @@ import { extractWikiLinks } from './wiki';
 export type KnowledgeGraphNode = {
   id: string;
   title: string;
-  noteId?: number;
+  path?: string;
   exists: boolean;
   active: boolean;
   linksCount: number;
@@ -31,9 +31,9 @@ export const buildKnowledgeGraph = (
     nodesMap.set(note.title, {
       id: note.title,
       title: note.title,
-      noteId: note.id,
+      path: note.path,
       exists: true,
-      active: note.id === selectedNote.id,
+      active: note.title === selectedNote.title,
       linksCount: 0,
     });
   });

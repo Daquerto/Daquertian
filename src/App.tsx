@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Sidebar from './components/Sidebar/Sidebar';
 import WorkspaceTabs from './components/WorkspaceTabs/WorkspaceTabs';
 import NoteTitleBar from './components/NoteTitleBar/NoteTitleBar';
@@ -7,10 +8,13 @@ import LinksPanel from './components/LinksPanel/LinksPanel';
 import BacklinksPanel from './components/BacklinksPanel/BacklinksPanel';
 import GraphView from './components/GraphView/GraphView';
 import { useNotes } from './hooks/useNotes';
+import { openVault } from './services/vaultService';
 import { extractWikiLinks } from './utils/wiki';
 import './App.css';
 
 function App() {
+  const [vaultPath, setVaultPath] = useState<string | null>(null);
+
   const {
     notes,
     selectedNote,
@@ -18,7 +22,7 @@ function App() {
     openNoteIds,
 
     setActiveView,
-
+    replaceNotes,
     openNote,
     createNote,
     deleteSelectedNote,
@@ -28,13 +32,26 @@ function App() {
     updateSelectedNoteContent,
   } = useNotes();
 
+    const handleOpenVault = async () => {
+    const openedVault = await openVault();
+
+    if (!openedVault) {
+      return;
+    }
+
+    setVaultPath(openedVault.path);
+    replaceNotes(openedVault.notes);
+  };
+
   return (
     <div className="app">
       <Sidebar
         notes={notes}
         selectedNote={selectedNote}
+        vaultPath={vaultPath}
         openNote={openNote}
         createNote={createNote}
+        openVault={handleOpenVault}
       />
 
       <main className="workspace">
